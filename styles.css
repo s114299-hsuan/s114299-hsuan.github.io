@@ -126,3 +126,21 @@ main {
   border-left-color: #8d6e63;
 }
 
+#schedule-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#schedule-list .delete-btn {
+  background: none;
+  border: none;
+  color: #8d6e63;
+  cursor: pointer;
+}
+
+#schedule-list .delete-btn:hover {
+  color: #5d4037;
+}
+
+
