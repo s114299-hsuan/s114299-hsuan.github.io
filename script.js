@@ -77,7 +77,7 @@ function renderHabits() {
 }
 
 // ================================
-// 行程資料處理
+// 行程資料（含日期與時間）
 // ================================
 function getSchedules() {
     return JSON.parse(localStorage.getItem("scheduleList")) || [];
@@ -87,15 +87,45 @@ function saveSchedules(data) {
     localStorage.setItem("scheduleList", JSON.stringify(data));
 }
 
+// ================================
+// 渲染行程（依日期＋時間排序）
+// ================================
 function renderSchedules() {
     const list = document.getElementById("schedule-list");
     list.innerHTML = "";
-    getSchedules().forEach((text, i) => {
-        const li = document.createElement("li");
-        li.textContent = text;
-        list.appendChild(li);
-    });
+
+    const schedules = getSchedules();
+
+    schedules
+        .sort((a, b) => {
+            const aTime = new Date(`${a.date}T${a.time}`);
+            const bTime = new Date(`${b.date}T${b.time}`);
+            return aTime - bTime;
+        })
+        .forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `[${item.date} ${item.time}] ${item.text}`;
+            list.appendChild(li);
+        });
 }
+
+// ================================
+// 新增行程（可選未來日期）
+// ================================
+document.getElementById("add-schedule-btn").onclick = () => {
+    const date = document.getElementById("schedule-date").value;
+    const time = document.getElementById("schedule-time").value;
+    const text = document.getElementById("new-schedule-input").value.trim();
+
+    if (!date || !time || !text) return;
+
+    const schedules = getSchedules();
+    schedules.push({ date, time, text });
+    saveSchedules(schedules);
+
+    document.getElementById("new-schedule-input").value = "";
+    renderSchedules();
+};
 
 // ================================
 // 分頁切換
