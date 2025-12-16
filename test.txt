@@ -1,2 +1,13 @@
 hello,world
 hello,Amy
+<!doctype html>
+<html>
+  <head>
+    <meta charset = "utf-8">
+    <title>網站標題</title>
+    <link rel="icon" href="myicon.png">
+  </head>
+  <body>
+      hello world
+  </body>
+</html>
