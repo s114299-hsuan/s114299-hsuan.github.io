@@ -77,3 +77,52 @@ main {
     background-color: #9E9E9E; /* 灰色背景 */
     cursor: not-allowed;
 }
+/* ===== 木質調主題 ===== */
+body {
+  background-color: #f3efe8;
+}
+
+header {
+  background: linear-gradient(135deg, #8d6e63, #a1887f);
+}
+
+nav button {
+  background-color: #a1887f;
+}
+
+nav button:hover {
+  background-color: #8d6e63;
+}
+
+main {
+  background: #faf7f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* 習慣細節文字 */
+#habit-list small {
+  display: block;
+  font-size: 0.8em;
+  color: #6d4c41;
+}
+
+/* 刪除按鈕 */
+.delete-btn {
+  background: none;
+  border: none;
+  color: #8d6e63;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: #5d4037;
+}
+
+/* 打卡完成 */
+#habit-list li.completed {
+  background-color: #ede7df;
+  border-left-color: #8d6e63;
+}
+
