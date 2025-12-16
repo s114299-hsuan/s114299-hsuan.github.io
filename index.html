@@ -1,11 +1,54 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset = "utf-8">
-    <title>網站標題</title>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的日常與習慣追蹤</title>
     <link rel="icon" href="myicon.png">
-  </head>
-  <body>
-      hello world
-  </body>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
+
+    <header>
+        <h1>🗓️ 我的生活追蹤站</h1>
+        <nav>
+            <button onclick="showSection('home')">首頁</button>
+            <button onclick="showSection('habits')">習慣/記錄</button>
+            <button onclick="showSection('schedule')">行程表</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="active">
+            <h2>歡迎回來！</h2>
+            <p>在這裡輕鬆管理您的習慣和行程。</p>
+            </section>
+
+        <section id="habits" class="hidden">
+            <h2>✨ 習慣追蹤與記錄</h2>
+            <ul id="habit-list">
+                <li>晨讀 30 分鐘 <button class="check-btn">打卡</button></li>
+                <li>喝水 8 杯 <button class="check-btn">打卡</button></li>
+                </ul>
+            <input type="text" id="new-habit-input" placeholder="新增習慣...">
+            <button id="add-habit-btn">新增</button>
+        </section>
+
+        <section id="schedule" class="hidden">
+            <h2>📝 我的今日行程</h2>
+            <ul id="schedule-list">
+                <li>[10:00] 寫期末報告</li>
+                <li>[14:30] 運動</li>
+                </ul>
+            <input type="text" id="new-schedule-input" placeholder="e.g., [16:00] 買晚餐">
+            <button id="add-schedule-btn">新增</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 期末專題</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
 </html>
