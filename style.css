@@ -57,3 +57,23 @@ main {
     cursor: pointer;
     border-radius: 3px;
 }
+
+/* 已打卡習慣的樣式 */
+#habit-list li.completed {
+    background-color: #e0f7fa; /* 淺藍色背景 */
+    opacity: 0.7; /* 稍微變淡 */
+    border-left: 5px solid #00BCD4; /* 藍色邊線 */
+}
+
+/* 已完成行程的樣式 */
+#schedule-list li.completed-schedule {
+    text-decoration: line-through; /* 劃掉文字 */
+    color: #888; /* 文字變灰 */
+    border-left: 5px solid #FF5722; /* 橘紅色邊線 */
+}
+
+/* 禁用按鈕的樣式 */
+.check-btn:disabled {
+    background-color: #9E9E9E; /* 灰色背景 */
+    cursor: not-allowed;
+}
