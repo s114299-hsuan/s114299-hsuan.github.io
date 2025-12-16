@@ -1,0 +1,59 @@
+/* 基本重置 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* 標題與導覽列 */
+header {
+    background-color: #4CAF50; /* 綠色背景 */
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+nav button {
+    background-color: #66BB6A;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 隱藏不活躍的區塊 */
+.hidden {
+    display: none;
+}
+
+/* 列表樣式 */
+#habit-list li, #schedule-list li {
+    background: white;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 5px;
+    list-style: none; /* 移除點點 */
+    display: flex; /* 讓內容和按鈕可以並排 */
+    justify-content: space-between; /* 內容靠左，按鈕靠右 */
+    align-items: center;
+    border-left: 5px solid #4CAF50;
+}
+
+.check-btn {
+    background-color: #FF9800; /* 橘色按鈕 */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
