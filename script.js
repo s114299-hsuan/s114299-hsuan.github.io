@@ -102,9 +102,25 @@ function renderSchedules() {
             const bTime = new Date(`${b.date}T${b.time}`);
             return aTime - bTime;
         })
-        .forEach(item => {
+        .forEach((item, index) => {
             const li = document.createElement("li");
-            li.textContent = `[${item.date} ${item.time}] ${item.text}`;
+
+            const span = document.createElement("span");
+            span.textContent = `[${item.date} ${item.time}] ${item.text}`;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "刪除";
+            deleteBtn.className = "delete-btn";
+
+            deleteBtn.onclick = () => {
+                const data = getSchedules();
+                data.splice(index, 1);   // 刪除對應行程
+                saveSchedules(data);
+                renderSchedules();
+            };
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
             list.appendChild(li);
         });
 }
