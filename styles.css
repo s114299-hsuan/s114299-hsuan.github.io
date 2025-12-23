@@ -219,3 +219,32 @@ header {
   font-size: 0.9em;
 }
 
+/* 讓 App 內的導覽列也美美的 */
+.app-nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.input-group, .schedule-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #d7ccc8;
+    border-radius: 6px;
+}
+
+#user-display {
+    font-size: 0.9em;
+    color: #f3efe8;
+    margin-right: 10px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
