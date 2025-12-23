@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的日常與習慣追蹤</title>
-    <link rel="icon" href="myicon.png">
-    <link rel="stylesheet" href="styles.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生活紀錄</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- ===== 登入頁 ===== -->
 <section id="login-page" class="login-page">
-  <!-- 唯美登入卡片 -->
+  <div class="login-card">
+    <h1>生活紀錄</h1>
+    <p class="subtitle">簡單 · 安靜 · 專注</p>
+
+    <input id="username" placeholder="帳號">
+    <input id="password" type="password" placeholder="密碼">
+
+    <button id="login-btn">登入</button>
+    <button id="register-btn" class="secondary">註冊</button>
+
+    <p id="login-msg"></p>
+  </div>
 </section>
 
+<!-- ===== 主系統 ===== -->
 <section id="app-page" class="hidden">
-  <!-- header / nav / main -->
+  <header class="app-header">
+    <h2>我的生活</h2>
+    <button id="logout-btn">登出</button>
+  </header>
+
+  <main class="app-main">
+    <h3>你已成功登入 🎉</h3>
+    <p>這裡之後可以放你的習慣與行程功能</p>
+  </main>
 </section>
 
 <script src="script.js"></script>
 </body>
 </html>
-
-
-<section id="login-page">
-  <h2>登入 / 註冊</h2>
-
-  <input id="username" placeholder="帳號">
-  <input id="password" type="password" placeholder="密碼">
-
-  <button id="login-btn">登入</button>
-  <button id="register-btn">註冊</button>
-
-  <p id="login-msg"></p>
-</section>
-
-<section id="app-page" class="hidden">
-  <!-- 你原本的 header / habits / schedule 全部放這 -->
-</section>
