@@ -3,37 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>生活紀錄</title>
+  <title>生活紀錄 - 專注每一天</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- ===== 登入頁 ===== -->
 <section id="login-page" class="login-page">
   <div class="login-card">
     <h1>生活紀錄</h1>
     <p class="subtitle">簡單 · 安靜 · 專注</p>
-
     <input id="username" placeholder="帳號">
     <input id="password" type="password" placeholder="密碼">
-
     <button id="login-btn">登入</button>
     <button id="register-btn" class="secondary">註冊</button>
-
     <p id="login-msg"></p>
   </div>
 </section>
 
-<!-- ===== 主系統 ===== -->
 <section id="app-page" class="hidden">
   <header class="app-header">
     <h2>我的生活</h2>
-    <button id="logout-btn">登出</button>
+    <div class="header-right">
+        <span id="user-display"></span>
+        <button id="logout-btn">登出</button>
+    </div>
   </header>
 
+  <nav class="app-nav">
+    <button onclick="showSection('habit-section')">習慣追蹤</button>
+    <button onclick="showSection('schedule-section')">行程規劃</button>
+  </nav>
+
   <main class="app-main">
-    <h3>你已成功登入 🎉</h3>
-    <p>這裡之後可以放你的習慣與行程功能</p>
+    <section id="habit-section">
+      <h3>✨ 每日習慣</h3>
+      <div class="input-group">
+        <input type="text" id="new-habit-input" placeholder="新增一個好習慣...">
+        <button id="add-habit-btn">新增</button>
+      </div>
+      <ul id="habit-list"></ul>
+    </section>
+
+    <section id="schedule-section" class="hidden">
+      <h3>📅 行程安排</h3>
+      <div class="schedule-controls">
+        <input type="date" id="schedule-date-input">
+        <input type="number" id="schedule-hour-input" min="0" max="23" placeholder="小時(0-23)">
+        <input type="text" id="new-schedule-input" placeholder="行程內容...">
+        <button id="add-schedule-btn">新增</button>
+      </div>
+      <h4 id="current-view-date"></h4>
+      <ul id="schedule-list"></ul>
+    </section>
   </main>
 </section>
 
