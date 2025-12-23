@@ -9,49 +9,45 @@
 </head>
 <body>
 
-    <header>
-        <h1>🗓️ 我的生活追蹤站</h1>
-        <nav>
-            <button onclick="showSection('home')">首頁</button>
-            <button onclick="showSection('habits')">習慣/記錄</button>
-            <button onclick="showSection('schedule')">行程表</button>
-        </nav>
-    </header>
+<!-- ===== 登入頁 ===== -->
+<section id="login-page" class="login-page">
+  <div class="login-card">
+    <h1>生活紀錄</h1>
+    <p class="subtitle">簡單 · 安靜 · 專注</p>
 
-    <main>
-        <section id="home" class="active">
-            <h2>歡迎回來！</h2>
-            <p>在這裡輕鬆管理您的習慣和行程。</p>
-            </section>
+    <input id="username" placeholder="帳號">
+    <input id="password" type="password" placeholder="密碼">
 
-        <section id="habits" class="hidden">
-            <h2>✨ 習慣追蹤與記錄</h2>
-            <ul id="habit-list">
-                <li>晨讀 30 分鐘 <button class="check-btn">打卡</button></li>
-                <li>喝水 8 杯 <button class="check-btn">打卡</button></li>
-                </ul>
-            <input type="text" id="new-habit-input" placeholder="新增習慣...">
-            <button id="add-habit-btn">新增</button>
-        </section>
+    <button id="login-btn">登入</button>
+    <button id="register-btn" class="secondary">註冊</button>
 
-       <section id="schedule" class="hidden">
-    <h2>📝 我的行程表</h2>
-
-    <ul id="schedule-list"></ul>
-
-    <input type="date" id="schedule-date">
-    <input type="time" id="schedule-time">
-    <input type="text" id="new-schedule-input" placeholder="行程內容">
-    <button id="add-schedule-btn">新增</button>
+    <p id="login-msg"></p>
+  </div>
 </section>
-    </main>
 
-    <footer>
-        <p>&copy; 2025 期末專題</p>
-    </footer>
+<!-- ===== 主系統 ===== -->
+<section id="app-page" class="hidden">
 
-    <script src="script.js"></script>
+<header>
+  <h1>我的生活追蹤</h1>
+  <button id="logout-btn">登出</button>
+</header>
+
+<nav>
+  <button onclick="showSection('home')">首頁</button>
+  <button onclick="showSection('habits')">習慣</button>
+  <button onclick="showSection('schedule')">行程</button>
+</nav>
+
+<main>
+  <!-- 你原本的 home / habits / schedule 都放這 -->
+</main>
+
+</section>
+
+<script src="script.js"></script>
 </body>
+
 </html>
 
 <section id="login-page">
