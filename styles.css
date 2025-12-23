@@ -143,4 +143,79 @@ main {
   color: #5d4037;
 }
 
+/* ===== 登入頁（唯美極簡） ===== */
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f5f2ee, #ede6dd);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: #faf8f5;
+  padding: 40px;
+  width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.login-card h1 {
+  margin-bottom: 8px;
+  font-weight: normal;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-size: 0.9em;
+  color: #8d6e63;
+  margin-bottom: 25px;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #d7ccc8;
+  background: #fff;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #a1887f;
+  color: white;
+  cursor: pointer;
+}
+
+.login-card button.secondary {
+  background: transparent;
+  color: #6d4c41;
+}
+
+#login-msg {
+  margin-top: 10px;
+  font-size: 0.85em;
+  color: #c62828;
+}
+
+/* ===== Header + 登出 ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#logout-btn {
+  background: transparent;
+  border: none;
+  color: #5d4037;
+  cursor: pointer;
+  font-size: 0.9em;
+}
 
