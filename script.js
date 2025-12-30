@@ -156,16 +156,17 @@ function showSection(id) {
 }
 
 function addEnterListener(inputId, buttonId) {
-    const input = document.getElementById(inputId);
-    if(input) {
-        input.addEventListener("keypress", (event) => {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                const btn = document.getElementById(buttonId);
-                if(btn) btn.click();
-            }
-        });
-    }
+    const input = document.getElementById("inputId");
+    // 防呆：如果找不到該 ID 的輸入框，就不綁定事件，避免報錯
+    if(!input) return; 
+
+    input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            const btn = document.getElementById(buttonId);
+            if(btn) btn.click();
+        }
+    });
 }
 
 /*************************
@@ -175,7 +176,12 @@ function initHabits(user) {
   const habitList = document.getElementById("habit-list");
   if(!habitList) return;
   
-  addEnterListener("new-habit-input", "add-habit-btn");
+  const inputEl = document.getElementById("new-habit-input");
+  if(inputEl) {
+      inputEl.addEventListener("keypress", (e) => {
+          if(e.key === "Enter") document.getElementById("add-habit-btn").click();
+      });
+  }
 
   const render = () => {
     habitList.innerHTML = "";
@@ -238,20 +244,29 @@ function initHabits(user) {
 }
 
 /*************************
- * 4. 行程排定 (時間線版 + HH:mm)
+ * 4. 行程排定 (修復版)
  *************************/
 function initSchedules(user) {
   const dateInput = document.getElementById("schedule-date-input");
   const timeInput = document.getElementById("schedule-time-input");
   
-  if(!dateInput || !timeInput) return;
+  // 防呆檢查：如果 HTML 沒更新導致找不到時間輸入框，跳出警告
+  if(!timeInput) {
+      console.error("錯誤：找不到 id='schedule-time-input'。請確認 index.html 是否已存檔並包含 <input type='time' id='schedule-time-input'>。");
+      return; 
+  }
   
-  // 預設日期為今天
   if(!dateInput.value) {
       dateInput.value = new Date().toISOString().split('T')[0];
   }
 
-  addEnterListener("new-schedule-input", "add-schedule-btn");
+  // 綁定 Enter 鍵 (直接在這裡綁定比較保險)
+  const inputCtx = document.getElementById("new-schedule-input");
+  if(inputCtx) {
+      inputCtx.addEventListener("keypress", (e) => {
+          if(e.key === "Enter") document.getElementById("add-schedule-btn").click();
+      });
+  }
 
   const render = () => {
     const date = dateInput.value;
@@ -261,11 +276,10 @@ function initSchedules(user) {
     const list = document.getElementById("schedule-list");
     list.innerHTML = "";
     
-    // 讀取資料
     const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
     const dayData = all[date] || [];
     
-    // 依時間排序 (HH:mm 字串比對即可)
+    // 依時間排序
     dayData.sort((a, b) => a.time.localeCompare(b.time));
 
     dayData.forEach((item, index) => {
@@ -283,7 +297,6 @@ function initSchedules(user) {
         </div>
       `;
       
-      // 完成
       li.querySelector(".check-btn").onclick = () => {
         item.done = true;
         all[date] = dayData; 
@@ -291,7 +304,6 @@ function initSchedules(user) {
         render();
       };
 
-      // 刪除
       li.querySelector(".delete-btn").onclick = () => {
         if(confirm("確定刪除此行程？")) {
             dayData.splice(index, 1);
@@ -308,24 +320,25 @@ function initSchedules(user) {
   const addSchBtn = document.getElementById("add-schedule-btn");
   if(addSchBtn) {
       addSchBtn.onclick = () => {
-        const inputCtx = document.getElementById("new-schedule-input");
+        // 在按鈕按下時才抓取值
         const text = inputCtx.value.trim();
-        const time = timeInput.value; // 取得 HH:mm
+        const time = timeInput.value; 
         const date = dateInput.value;
+
+        // 除錯用：如果您按了按鈕沒反應，可以看 Console
+        console.log(`嘗試新增行程: 日期=${date}, 時間=${time}, 內容=${text}`);
 
         if (text && time) {
           const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
           if (!all[date]) all[date] = [];
           
-          // 儲存格式改為 { time: "14:30", text: "..." }
           all[date].push({ time: time, text, done: false });
           
           localStorage.setItem(`schedules_${user}`, JSON.stringify(all));
           inputCtx.value = "";
-          // 不清空時間，方便連續輸入相近時間
           render();
         } else {
-            alert("請務必選擇「時間」並輸入「內容」！");
+            alert("請務必選擇「時間」並輸入「內容」！(若時間選不了，請檢查 HTML)");
         }
       };
   }
