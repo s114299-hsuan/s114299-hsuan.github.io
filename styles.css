@@ -1,235 +1,311 @@
-/* 全域設定 */
+/* --- 日式復古配色變數 --- */
+:root {
+    --bg-color: #f4f1ea;       /* 和紙白 */
+    --card-bg: #fffbf0;        /* 象牙白 */
+    --text-main: #2c3e50;      /* 靛藍 (文字) */
+    --text-sub: #5d6d7e;       /* 灰藍 */
+    --accent-red: #a93226;     /* 茜色 (強調/刪除) */
+    --accent-blue: #2471a3;    /* 琉瑞 (按鈕/連結) */
+    --accent-gold: #d4ac0d;    /* 芥子 (裝飾) */
+    --border-color: #2c3e50;   /* 深色框線 */
+    --font-stack: "Noto Serif TC", "Songti TC", serif;
+}
+
 body {
-    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    font-family: var(--font-stack);
     margin: 0;
     padding: 0;
-    background-color: #f3efe8;
-    color: #4e342e;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    background-image: radial-gradient(#d6d0c4 1px, transparent 1px);
+    background-size: 20px 20px; /* 點狀紋理 */
 }
 
 .hidden { display: none !important; }
 
-/* 登入頁面設計 */
+/* --- 登入頁面 --- */
 .login-page {
     min-height: 100vh;
-    background: linear-gradient(180deg, #f5f2ee, #ede6dd);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
-.login-card {
-    background: #faf8f5;
+/* 復古邊框卡片 */
+.retro-border {
+    background: var(--card-bg);
     padding: 40px;
     width: 320px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    text-align: center;
+    border: 3px solid var(--border-color);
+    box-shadow: 8px 8px 0px rgba(44, 62, 80, 0.2); /* 硬陰影 */
+    position: relative;
 }
 
-.login-card h1 { margin-bottom: 8px; font-weight: normal; letter-spacing: 2px; }
-.subtitle { font-size: 0.9em; color: #8d6e63; margin-bottom: 25px; }
+/* 雙線裝飾 */
+.retro-border::before {
+    content: "";
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px solid var(--border-color);
+    pointer-events: none;
+}
 
-/* 輸入框統一樣式 */
-.login-card input, .input-group input, .schedule-controls input {
+.card-header h1 {
+    margin: 0;
+    font-size: 2em;
+    letter-spacing: 0.2em;
+    border-bottom: 2px solid var(--accent-red);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+.subtitle {
+    font-size: 0.9em;
+    color: var(--text-sub);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* --- 輸入框：底線風格 --- */
+input {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    border: 1px solid #d7ccc8;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #b2babb;
+    font-family: var(--font-stack);
+    font-size: 1em;
+    color: var(--text-main);
+    transition: 0.3s;
     box-sizing: border-box;
-    font-family: inherit;
+}
+input:focus {
+    outline: none;
+    border-bottom: 2px solid var(--accent-blue);
+    background-color: rgba(255,255,255,0.5);
 }
 
-/* 時間選擇器與日期選擇器特別優化 */
-input[type="time"], input[type="date"] {
-    background-color: #fff;
-    cursor: pointer;
-}
-
-.login-card button {
+/* --- 按鈕：印章風格 --- */
+.retro-btn {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #a1887f;
-    color: white;
-    cursor: pointer;
+    font-family: var(--font-stack);
+    font-weight: bold;
     font-size: 1em;
-    transition: 0.3s;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    transition: 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.login-card button:hover { background: #8d6e63; }
-.login-card button.secondary { background: transparent; color: #8d6e63; border: 1px solid #d7ccc8; }
+.primary-btn, .action-btn {
+    background-color: var(--text-main);
+    color: #fff;
+    box-shadow: 4px 4px 0px var(--accent-gold);
+}
+.primary-btn:hover, .action-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--accent-gold);
+}
 
-/* 主系統界面 */
+.secondary-btn {
+    background-color: transparent;
+    color: var(--text-main);
+    border-style: dashed;
+}
+.secondary-btn:hover {
+    background-color: #eaecee;
+}
+
+/* --- Header & Nav --- */
 .app-header {
-    background: #8d6e63;
-    color: white;
+    background-color: var(--card-bg);
+    border-bottom: 3px solid var(--border-color);
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+.app-header h2 { margin: 0; font-size: 1.5em; }
 
 .app-nav {
     display: flex;
     justify-content: center;
-    background: #faf7f2;
-    padding: 10px;
-    border-bottom: 1px solid #d7ccc8;
+    background: #e5e8e8;
+    padding: 15px;
+    border-bottom: 1px solid #d5d8dc;
 }
-
-.app-nav button {
+.nav-btn {
     background: transparent;
     border: none;
-    padding: 10px 20px;
-    margin: 0 5px;
+    margin: 0 15px;
+    font-size: 1.1em;
+    font-family: var(--font-stack);
     cursor: pointer;
-    color: #6d4c41;
-    font-size: 1em;
-    border-radius: 5px;
+    color: var(--text-sub);
+    position: relative;
 }
-
-.app-nav button:hover { background: #efebe9; }
+.nav-btn:hover { color: var(--text-main); }
+/* 選單下方的紅點裝飾 */
+.nav-btn:hover::after {
+    content: "•";
+    color: var(--accent-red);
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 .app-main {
     max-width: 800px;
-    margin: 30px auto;
-    padding: 20px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
-/* 卡片與列表設計 */
+/* --- 內容區塊 --- */
 .welcome-card, .section-title {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-    border-left: 6px solid #a1887f;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.welcome-card h3 { font-size: 1.8em; margin-bottom: 5px; }
+.retro-hr {
+    border: 0;
+    height: 1px;
+    background: var(--text-sub);
+    width: 50%;
+    margin: 20px auto;
 }
 
-/* 一般列表 (習慣追蹤用) */
-ul { padding: 0; }
+/* 輸入群組修正 */
+.input-group, .schedule-controls {
+    background: var(--card-bg);
+    padding: 20px;
+    border: 2px solid var(--border-color);
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.input-group input, .schedule-controls input {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 150px;
+}
+.schedule-controls button, .input-group button {
+    width: auto;
+    margin-top: 0;
+    padding: 8px 20px;
+}
+
+/* --- 列表樣式 --- */
+ul { padding: 0; list-style: none; }
+
 li {
-    background: white;
-    margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 8px;
+    background: #fff;
+    border-bottom: 1px solid #d5d8dc;
+    padding: 15px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    list-style: none;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-}
-
-/* 行程控制列 */
-.schedule-controls {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    background: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
-.schedule-controls input { width: auto; flex: 1; margin-bottom: 0; }
-
-/* --- 橘色系按鈕樣式 --- */
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-#delete-account-btn {
-    background-color: #ff7043; 
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    margin-right: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-#delete-account-btn:hover { background-color: #e64a19; }
-
-.delete-btn {
-    background-color: transparent;
-    color: #ff7043;
-    border: 1px solid #ff7043;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    border-radius: 5px;
-    cursor: pointer;
     transition: 0.3s;
 }
-.delete-btn:hover { background-color: #fbe9e7; color: #d84315; border-color: #d84315; }
+li:hover { background-color: #fbfcfc; }
 
-/* --- 全新：時間線樣式 (Timeline) --- */
-
-.timeline-container {
-    padding: 10px 0 10px 20px; /* 左邊留空間給線條 */
+/* 完成狀態 */
+li.completed, li.completed-schedule {
+    color: #999;
+    text-decoration: line-through;
+    opacity: 0.7;
 }
 
+/* 按鈕群組 */
+.action-buttons { display: flex; gap: 10px; }
+
+.check-btn {
+    border: 1px solid var(--accent-blue);
+    background: transparent;
+    color: var(--accent-blue);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: var(--font-stack);
+}
+.check-btn:hover { background: var(--accent-blue); color: white; }
+
+.delete-btn {
+    border: 1px solid var(--accent-red);
+    background: transparent;
+    color: var(--accent-red);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: var(--font-stack);
+}
+.delete-btn:hover { background: var(--accent-red); color: white; }
+
+/* --- 註銷按鈕 (Header) --- */
+.danger-btn-small {
+    background-color: var(--accent-red);
+    color: white;
+    border: 1px solid var(--accent-red);
+    padding: 5px 15px;
+    font-size: 0.9em;
+    width: auto;
+    margin-right: 10px;
+    box-shadow: 2px 2px 0 #5e1c15;
+}
+.danger-btn-small:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 #5e1c15;
+}
+.ghost-btn {
+    width: auto;
+    background: transparent;
+    border: 1px solid var(--text-main);
+    padding: 5px 15px;
+    margin-top: 0;
+}
+
+/* --- 時間軸 (Timeline) --- */
+.timeline-container {
+    padding: 10px 0 10px 20px;
+}
 ul.timeline-list {
     position: relative;
-    border-left: 3px solid #d7ccc8; /* 時間線主軸 */
-    padding-left: 20px;
+    border-left: 2px solid var(--text-main); /* 實線軸 */
+    padding-left: 25px;
     margin-left: 10px;
 }
 
 ul.timeline-list li {
-    position: relative;
-    background: white;
+    background: var(--card-bg);
+    border: 1px solid #d5d8dc;
     margin-bottom: 15px;
-    border-radius: 8px;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
 }
 
-/* 時間線上的圓點 */
+/* 時間軸圓點 */
 ul.timeline-list li::before {
     content: '';
     position: absolute;
-    left: -29px; /* 調整圓點位置到線條上 */
+    left: -32px;
     top: 50%;
     transform: translateY(-50%);
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--card-bg);
+    border: 3px solid var(--accent-red); /* 朱紅圓點 */
     border-radius: 50%;
-    background-color: #fff;
-    border: 3px solid #ff7043; /* 橘色圓點 */
     z-index: 1;
 }
 
-/* 完成後的行程：圓點變灰、文字劃掉 */
-li.completed-schedule {
-    background-color: #f5f5f5;
-    opacity: 0.8;
-}
-li.completed-schedule::before {
-    border-color: #bdbdbd; /* 灰色圓點 */
-    background-color: #e0e0e0;
-}
-li.completed-schedule span {
-    text-decoration: line-through;
-    color: #9e9e9e;
-}
-
-/* 時間顯示樣式 */
 .time-tag {
+    font-family: monospace; /* 時間用等寬字體 */
     font-weight: bold;
-    color: #d84315;
-    margin-right: 10px;
-    background: #fbe9e7;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.9em;
+    color: var(--text-main);
+    margin-right: 15px;
+    border-right: 1px solid #ccc;
+    padding-right: 15px;
 }
-
-button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; border: none; color: white;}
