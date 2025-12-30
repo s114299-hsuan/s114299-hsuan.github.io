@@ -129,9 +129,8 @@ button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
 }
 .schedule-controls input { width: auto; flex: 1; }
 
-/* --- 新增功能樣式 (橘色系修正版) --- */
+/* --- 新增功能樣式 (橘色系) --- */
 
-/* 列表內的按鈕群組 */
 .action-buttons {
     display: flex;
     gap: 8px;
@@ -139,19 +138,23 @@ button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
 
 /* 1. 註銷帳號按鈕 (Header) - 實心橘色 */
 #delete-account-btn {
-    background-color: #ff7043; /* 溫暖的橘色 */
+    background-color: #ff7043; 
     color: white;
+    border: none;
+    padding: 8px 15px;
     margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 #delete-account-btn:hover {
-    background-color: #e64a19; /* 滑鼠移過去變深橘色 */
+    background-color: #e64a19; 
 }
 
-/* 2. 刪除按鈕 (列表內小顆的) - 橘色邊框 */
+/* 2. 刪除按鈕 (列表內) - 橘色邊框 */
 .delete-btn {
     background-color: transparent;
-    color: #ff7043; /* 文字橘色 */
-    border: 1px solid #ff7043; /* 邊框橘色 */
+    color: #ff7043;
+    border: 1px solid #ff7043;
     padding: 5px 10px;
     font-size: 0.9em;
     border-radius: 5px;
@@ -160,7 +163,7 @@ button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
 }
 
 .delete-btn:hover {
-    background-color: #fbe9e7; /* 滑鼠移過去出現淡淡橘色底 */
+    background-color: #fbe9e7;
     color: #d84315;
     border-color: #d84315;
 }
