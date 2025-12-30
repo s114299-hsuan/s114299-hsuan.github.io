@@ -65,34 +65,42 @@ document.addEventListener("DOMContentLoaded", () => {
     location.reload();
   };
 
-  // --- 新功能：註銷帳號 ---
-  const deleteAccountBtn = document.getElementById("delete-account-btn");
-  if(deleteAccountBtn) {
-      deleteAccountBtn.onclick = () => {
-          const user = storage.getCurrentUser();
-          if(!user) return;
+ // --- 新功能：註銷帳號 (橘色系/修復版) ---
+  // 使用 setTimeout 確保 HTML 元素已經完全載入
+  setTimeout(() => {
+      const deleteAccountBtn = document.getElementById("delete-account-btn");
+      
+      if(deleteAccountBtn) {
+          console.log("註銷按鈕已載入"); // (除錯用) 如果你在 F12 console 看到這行，代表按鈕抓到了
           
-          const confirmDelete = confirm(`⚠️ 警告：確定要永久刪除「${user}」的帳號嗎？\n所有的習慣與行程資料都將消失，無法復原！`);
-          
-          if(confirmDelete) {
-              // 1. 刪除使用者列表中的帳號
-              const users = storage.getUsers();
-              delete users[user];
-              storage.saveUsers(users);
+          deleteAccountBtn.onclick = () => {
+              const user = storage.getCurrentUser();
+              if(!user) return;
+              
+              // 雙重確認視窗
+              const confirmDelete = confirm(`🍊 確定要註銷「${user}」的帳號嗎？\n\n注意：所有的習慣與行程資料都將永久刪除 (橘色警報)！`);
+              
+              if(confirmDelete) {
+                  // 1. 刪除使用者列表中的帳號
+                  const users = storage.getUsers();
+                  delete users[user];
+                  storage.saveUsers(users);
 
-              // 2. 刪除該使用者的專屬資料
-              localStorage.removeItem(`habits_${user}`);
-              localStorage.removeItem(`checks_${user}`);
-              localStorage.removeItem(`schedules_${user}`);
+                  // 2. 刪除該使用者的專屬資料
+                  localStorage.removeItem(`habits_${user}`);
+                  localStorage.removeItem(`checks_${user}`);
+                  localStorage.removeItem(`schedules_${user}`);
 
-              // 3. 清除登入狀態並登出
-              localStorage.removeItem("currentUser");
-              alert("帳號已註銷。");
-              location.reload();
-          }
-      };
-  }
-});
+                  // 3. 清除登入狀態並重整
+                  localStorage.removeItem("currentUser");
+                  alert("帳號已成功註銷，資料已清除。");
+                  location.reload();
+              }
+          };
+      } else {
+          console.error("錯誤：找不到 id 為 delete-account-btn 的按鈕，請檢查 HTML！");
+      }
+  }, 100);
 
 function showApp(user) {
   document.getElementById("login-page").classList.add("hidden");
