@@ -2,7 +2,6 @@
  * 1. 加密與資料管理
  *************************/
 async function hashPassword(password) {
-  // 防止在某些環境下 crypto 無法使用導致報錯
   if (!window.crypto || !window.crypto.subtle) {
     return "dev_mode_" + password;
   }
@@ -27,16 +26,13 @@ const storage = {
  * 2. 登入、註冊與導覽邏輯
  *************************/
 document.addEventListener("DOMContentLoaded", () => {
-  // 自動檢查登入狀態
   const currentUser = storage.getCurrentUser();
   if (currentUser) {
       showApp(currentUser);
   }
 
-  // 支援 Enter 鍵 (密碼欄位)
   addEnterListener("password", "login-btn");
 
-  // 註冊
   const registerBtn = document.getElementById("register-btn");
   if (registerBtn) {
       registerBtn.onclick = async () => {
@@ -62,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  // 登入
   const loginBtn = document.getElementById("login-btn");
   if (loginBtn) {
       loginBtn.onclick = async () => {
@@ -82,13 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
           return msg.textContent = "密碼錯誤";
         }
         
-        // 登入成功
         localStorage.setItem("currentUser", u);
         location.reload(); 
       };
   }
 
-  // 登出
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
       logoutBtn.onclick = () => {
@@ -97,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  // --- 新功能：註銷帳號 (橘色系) ---
   const deleteAccountBtn = document.getElementById("delete-account-btn");
   if (deleteAccountBtn) {
       deleteAccountBtn.onclick = () => {
@@ -116,14 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
               localStorage.removeItem(`schedules_${user}`);
               localStorage.removeItem("currentUser");
               
-              alert("帳號已註銷，感謝您的使用。");
+              alert("帳號已註銷。");
               location.reload();
           }
       };
   }
 });
 
-/* 頁面切換與顯示邏輯 */
 function showApp(user) {
   const loginPage = document.getElementById("login-page");
   const appPage = document.getElementById("app-page");
@@ -140,7 +131,6 @@ function showApp(user) {
   const dateDisplay = document.getElementById("today-date-display");
   if(dateDisplay) dateDisplay.textContent = new Date().toLocaleDateString();
   
-  // 為了安全，顯示內容前先確保 DOM 顯示出來
   setTimeout(() => {
       showSection('home-section');
       initHabits(user);
@@ -149,17 +139,14 @@ function showApp(user) {
 }
 
 function showSection(id) {
-    // 隱藏所有 section
     const sections = document.querySelectorAll('.app-main > section');
     sections.forEach(s => s.classList.add('hidden'));
     
-    // 顯示目標 section
     const target = document.getElementById(id);
     if(target) {
         target.classList.remove('hidden');
     }
     
-    // 額外處理：當切換到習慣或行程頁面時，將焦點放在輸入框
     if(id === 'habit-section') {
         setTimeout(() => document.getElementById("new-habit-input")?.focus(), 100);
     }
@@ -168,7 +155,6 @@ function showSection(id) {
     }
 }
 
-// 輔助函式：綁定 Enter 鍵觸發按鈕
 function addEnterListener(inputId, buttonId) {
     const input = document.getElementById(inputId);
     if(input) {
@@ -183,7 +169,7 @@ function addEnterListener(inputId, buttonId) {
 }
 
 /*************************
- * 3. 核心功能：習慣追蹤 (含刪除與橘色按鈕)
+ * 3. 習慣追蹤
  *************************/
 function initHabits(user) {
   const habitList = document.getElementById("habit-list");
@@ -212,14 +198,12 @@ function initHabits(user) {
         </div>
       `;
       
-      // 打卡
       li.querySelector(".check-btn").onclick = () => {
         checks[h] = today;
         localStorage.setItem(`checks_${user}`, JSON.stringify(checks));
         render();
       };
 
-      // 刪除
       li.querySelector(".delete-btn").onclick = () => {
           if(confirm(`確定不再追蹤「${h}」這個習慣嗎？`)) {
               habits.splice(index, 1);
@@ -254,13 +238,15 @@ function initHabits(user) {
 }
 
 /*************************
- * 4. 核心功能：行程排定 (含刪除與橘色按鈕)
+ * 4. 行程排定 (時間線版 + HH:mm)
  *************************/
 function initSchedules(user) {
   const dateInput = document.getElementById("schedule-date-input");
-  if(!dateInput) return;
+  const timeInput = document.getElementById("schedule-time-input");
   
-  // 預設今天
+  if(!dateInput || !timeInput) return;
+  
+  // 預設日期為今天
   if(!dateInput.value) {
       dateInput.value = new Date().toISOString().split('T')[0];
   }
@@ -270,25 +256,29 @@ function initSchedules(user) {
   const render = () => {
     const date = dateInput.value;
     const label = document.getElementById("current-view-date-label");
-    if(label) label.textContent = `📅 ${date} 的清單`;
+    if(label) label.textContent = `📅 ${date} 的時間軸`;
     
     const list = document.getElementById("schedule-list");
     list.innerHTML = "";
     
+    // 讀取資料
     const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
     const dayData = all[date] || [];
     
-    // 排序
-    dayData.sort((a,b) => a.hour - b.hour);
+    // 依時間排序 (HH:mm 字串比對即可)
+    dayData.sort((a, b) => a.time.localeCompare(b.time));
 
     dayData.forEach((item, index) => {
       const li = document.createElement("li");
       if (item.done) li.className = "completed-schedule";
       
       li.innerHTML = `
-        <span><b>${String(item.hour).padStart(2, '0')}:00</b> - ${item.text}</span>
+        <div style="display: flex; align-items: center;">
+            <span class="time-tag">${item.time}</span>
+            <span>${item.text}</span>
+        </div>
         <div class="action-buttons">
-            <button class="check-btn" ${item.done ? 'disabled' : ''}>${item.done ? '已完成' : '完成'}</button>
+            <button class="check-btn" ${item.done ? 'disabled' : ''}>${item.done ? '✓' : '完成'}</button>
             <button class="delete-btn">刪除</button>
         </div>
       `;
@@ -319,22 +309,23 @@ function initSchedules(user) {
   if(addSchBtn) {
       addSchBtn.onclick = () => {
         const inputCtx = document.getElementById("new-schedule-input");
-        const inputHour = document.getElementById("schedule-hour-input");
         const text = inputCtx.value.trim();
-        const hour = inputHour.value;
+        const time = timeInput.value; // 取得 HH:mm
         const date = dateInput.value;
 
-        if (text && hour !== "") {
+        if (text && time) {
           const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
           if (!all[date]) all[date] = [];
           
-          all[date].push({ hour: parseInt(hour), text, done: false });
+          // 儲存格式改為 { time: "14:30", text: "..." }
+          all[date].push({ time: time, text, done: false });
           
           localStorage.setItem(`schedules_${user}`, JSON.stringify(all));
           inputCtx.value = "";
+          // 不清空時間，方便連續輸入相近時間
           render();
         } else {
-            alert("請輸入小時與內容！");
+            alert("請務必選擇「時間」並輸入「內容」！");
         }
       };
   }
