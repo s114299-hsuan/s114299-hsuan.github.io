@@ -3,7 +3,7 @@ body {
     font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f3efe8; /* 柔和木質底色 */
+    background-color: #f3efe8;
     color: #4e342e;
 }
 
@@ -30,6 +30,7 @@ body {
 .login-card h1 { margin-bottom: 8px; font-weight: normal; letter-spacing: 2px; }
 .subtitle { font-size: 0.9em; color: #8d6e63; margin-bottom: 25px; }
 
+/* 輸入框統一樣式 */
 .login-card input, .input-group input, .schedule-controls input {
     width: 100%;
     padding: 12px;
@@ -37,6 +38,13 @@ body {
     border-radius: 8px;
     border: 1px solid #d7ccc8;
     box-sizing: border-box;
+    font-family: inherit;
+}
+
+/* 時間選擇器與日期選擇器特別優化 */
+input[type="time"], input[type="date"] {
+    background-color: #fff;
+    cursor: pointer;
 }
 
 .login-card button {
@@ -102,6 +110,7 @@ body {
     border-left: 6px solid #a1887f;
 }
 
+/* 一般列表 (習慣追蹤用) */
 ul { padding: 0; }
 li {
     background: white;
@@ -115,28 +124,26 @@ li {
     box-shadow: 0 2px 5px rgba(0,0,0,0.03);
 }
 
-/* 狀態樣式 */
-li.completed { background-color: #f1f1f1; opacity: 0.7; color: #9e9e9e; }
-li.completed-schedule { text-decoration: line-through; color: #9e9e9e; }
-
-button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
-
 /* 行程控制列 */
 .schedule-controls {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
 }
-.schedule-controls input { width: auto; flex: 1; }
+.schedule-controls input { width: auto; flex: 1; margin-bottom: 0; }
 
-/* --- 新增功能樣式 (橘色系) --- */
+/* --- 橘色系按鈕樣式 --- */
 
 .action-buttons {
     display: flex;
     gap: 8px;
 }
 
-/* 1. 註銷帳號按鈕 (Header) - 實心橘色 */
 #delete-account-btn {
     background-color: #ff7043; 
     color: white;
@@ -146,11 +153,8 @@ button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
     border-radius: 5px;
     cursor: pointer;
 }
-#delete-account-btn:hover {
-    background-color: #e64a19; 
-}
+#delete-account-btn:hover { background-color: #e64a19; }
 
-/* 2. 刪除按鈕 (列表內) - 橘色邊框 */
 .delete-btn {
     background-color: transparent;
     color: #ff7043;
@@ -161,9 +165,71 @@ button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
     cursor: pointer;
     transition: 0.3s;
 }
+.delete-btn:hover { background-color: #fbe9e7; color: #d84315; border-color: #d84315; }
 
-.delete-btn:hover {
-    background-color: #fbe9e7;
-    color: #d84315;
-    border-color: #d84315;
+/* --- 全新：時間線樣式 (Timeline) --- */
+
+.timeline-container {
+    padding: 10px 0 10px 20px; /* 左邊留空間給線條 */
 }
+
+ul.timeline-list {
+    position: relative;
+    border-left: 3px solid #d7ccc8; /* 時間線主軸 */
+    padding-left: 20px;
+    margin-left: 10px;
+}
+
+ul.timeline-list li {
+    position: relative;
+    background: white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* 時間線上的圓點 */
+ul.timeline-list li::before {
+    content: '';
+    position: absolute;
+    left: -29px; /* 調整圓點位置到線條上 */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 3px solid #ff7043; /* 橘色圓點 */
+    z-index: 1;
+}
+
+/* 完成後的行程：圓點變灰、文字劃掉 */
+li.completed-schedule {
+    background-color: #f5f5f5;
+    opacity: 0.8;
+}
+li.completed-schedule::before {
+    border-color: #bdbdbd; /* 灰色圓點 */
+    background-color: #e0e0e0;
+}
+li.completed-schedule span {
+    text-decoration: line-through;
+    color: #9e9e9e;
+}
+
+/* 時間顯示樣式 */
+.time-tag {
+    font-weight: bold;
+    color: #d84315;
+    margin-right: 10px;
+    background: #fbe9e7;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; border: none; color: white;}
