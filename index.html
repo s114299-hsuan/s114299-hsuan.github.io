@@ -66,16 +66,20 @@
     <section id="schedule-section" class="hidden">
       <div class="section-title">
         <h3>📅 行程排定</h3>
-        <p>以小時為單位，精準規劃你的未來</p>
+        <p>精準規劃時間，掌握每一分鐘</p>
       </div>
       <div class="schedule-controls">
         <input type="date" id="schedule-date-input">
-        <input type="number" id="schedule-hour-input" min="0" max="23" placeholder="小時(0-23)">
-        <input type="text" id="new-schedule-input" placeholder="行程規劃內容... (按 Enter 新增)">
+        <input type="time" id="schedule-time-input">
+        <input type="text" id="new-schedule-input" placeholder="要做什麼事？(按 Enter 新增)">
         <button id="add-schedule-btn">新增行程</button>
       </div>
+      
       <h4 id="current-view-date-label"></h4>
-      <ul id="schedule-list"></ul>
+      
+      <div class="timeline-container">
+        <ul id="schedule-list" class="timeline-list"></ul>
+      </div>
     </section>
 
   </main>
