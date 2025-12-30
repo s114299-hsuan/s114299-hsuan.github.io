@@ -2,13 +2,19 @@
  * 1. 加密與資料管理
  *************************/
 async function hashPassword(password) {
+  // 防止在某些環境下 crypto 無法使用導致報錯
   if (!window.crypto || !window.crypto.subtle) {
     return "dev_mode_" + password;
   }
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+  try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) {
+      console.warn("加密失敗，使用明文 fallback");
+      return "dev_mode_" + password;
+  }
 }
 
 const storage = {
@@ -21,16 +27,16 @@ const storage = {
  * 2. 登入、註冊與導覽邏輯
  *************************/
 document.addEventListener("DOMContentLoaded", () => {
-  // 檢查是否已登入
+  // 自動檢查登入狀態
   const currentUser = storage.getCurrentUser();
   if (currentUser) {
       showApp(currentUser);
   }
 
-  // 支援 Enter 鍵登入 (綁定密碼欄位)
+  // 支援 Enter 鍵 (密碼欄位)
   addEnterListener("password", "login-btn");
 
-  // 註冊按鈕事件
+  // 註冊
   const registerBtn = document.getElementById("register-btn");
   if (registerBtn) {
       registerBtn.onclick = async () => {
@@ -56,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  // 登入按鈕事件
+  // 登入
   const loginBtn = document.getElementById("login-btn");
   if (loginBtn) {
       loginBtn.onclick = async () => {
@@ -65,10 +71,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const msg = document.getElementById("login-msg");
         const users = storage.getUsers();
         
-        // 驗證帳號密碼
-        if (!users[u] || (await hashPassword(p)) !== users[u].passwordHash) {
+        if (!users[u]) {
+             msg.style.color = "red";
+             return msg.textContent = "帳號不存在";
+        }
+
+        const hash = await hashPassword(p);
+        if (hash !== users[u].passwordHash) {
           msg.style.color = "red";
-          return msg.textContent = "帳號或密碼錯誤";
+          return msg.textContent = "密碼錯誤";
         }
         
         // 登入成功
@@ -77,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  // 登出按鈕
+  // 登出
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
       logoutBtn.onclick = () => {
@@ -105,13 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
               localStorage.removeItem(`schedules_${user}`);
               localStorage.removeItem("currentUser");
               
-              alert("帳號已註銷。");
+              alert("帳號已註銷，感謝您的使用。");
               location.reload();
           }
       };
   }
 });
 
+/* 頁面切換與顯示邏輯 */
 function showApp(user) {
   const loginPage = document.getElementById("login-page");
   const appPage = document.getElementById("app-page");
@@ -128,16 +140,32 @@ function showApp(user) {
   const dateDisplay = document.getElementById("today-date-display");
   if(dateDisplay) dateDisplay.textContent = new Date().toLocaleDateString();
   
-  showSection('home-section');
-  initHabits(user);
-  initSchedules(user);
+  // 為了安全，顯示內容前先確保 DOM 顯示出來
+  setTimeout(() => {
+      showSection('home-section');
+      initHabits(user);
+      initSchedules(user);
+  }, 50);
 }
 
 function showSection(id) {
-  const sections = document.querySelectorAll('.app-main > section');
-  sections.forEach(s => s.classList.add('hidden'));
-  const target = document.getElementById(id);
-  if(target) target.classList.remove('hidden');
+    // 隱藏所有 section
+    const sections = document.querySelectorAll('.app-main > section');
+    sections.forEach(s => s.classList.add('hidden'));
+    
+    // 顯示目標 section
+    const target = document.getElementById(id);
+    if(target) {
+        target.classList.remove('hidden');
+    }
+    
+    // 額外處理：當切換到習慣或行程頁面時，將焦點放在輸入框
+    if(id === 'habit-section') {
+        setTimeout(() => document.getElementById("new-habit-input")?.focus(), 100);
+    }
+    if(id === 'schedule-section') {
+        setTimeout(() => document.getElementById("new-schedule-input")?.focus(), 100);
+    }
 }
 
 // 輔助函式：綁定 Enter 鍵觸發按鈕
@@ -184,12 +212,14 @@ function initHabits(user) {
         </div>
       `;
       
+      // 打卡
       li.querySelector(".check-btn").onclick = () => {
         checks[h] = today;
         localStorage.setItem(`checks_${user}`, JSON.stringify(checks));
         render();
       };
 
+      // 刪除
       li.querySelector(".delete-btn").onclick = () => {
           if(confirm(`確定不再追蹤「${h}」這個習慣嗎？`)) {
               habits.splice(index, 1);
@@ -230,7 +260,10 @@ function initSchedules(user) {
   const dateInput = document.getElementById("schedule-date-input");
   if(!dateInput) return;
   
-  dateInput.value = new Date().toISOString().split('T')[0];
+  // 預設今天
+  if(!dateInput.value) {
+      dateInput.value = new Date().toISOString().split('T')[0];
+  }
 
   addEnterListener("new-schedule-input", "add-schedule-btn");
 
@@ -245,6 +278,7 @@ function initSchedules(user) {
     const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
     const dayData = all[date] || [];
     
+    // 排序
     dayData.sort((a,b) => a.hour - b.hour);
 
     dayData.forEach((item, index) => {
@@ -259,6 +293,7 @@ function initSchedules(user) {
         </div>
       `;
       
+      // 完成
       li.querySelector(".check-btn").onclick = () => {
         item.done = true;
         all[date] = dayData; 
@@ -266,6 +301,7 @@ function initSchedules(user) {
         render();
       };
 
+      // 刪除
       li.querySelector(".delete-btn").onclick = () => {
         if(confirm("確定刪除此行程？")) {
             dayData.splice(index, 1);
