@@ -128,3 +128,29 @@ button:disabled { background-color: #bdbdbd !important; cursor: not-allowed; }
     flex-wrap: wrap;
 }
 .schedule-controls input { width: auto; flex: 1; }
+
+/* --- 新增功能樣式 --- */
+
+/* 列表內的按鈕群組 */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* 刪除按鈕 (列表內小顆的) */
+.delete-btn {
+    background-color: transparent;
+    color: #e57373;
+    border: 1px solid #e57373;
+    padding: 5px 10px;
+    font-size: 0.9em;
+}
+.delete-btn:hover {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* 註銷帳號按鈕 (Header) */
+#delete-account-btn:hover {
+    background-color: #b71c1c !important;
+}
