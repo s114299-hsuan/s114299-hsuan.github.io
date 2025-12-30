@@ -41,20 +41,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const msg = document.getElementById("login-msg");
         
         if (!u || !p) {
-            msg.style.color = "red";
-            return msg.textContent = "請填寫完整資訊";
+            msg.style.color = "#a93226";
+            return msg.textContent = "※ 請填寫完整資訊";
         }
         
         const users = storage.getUsers();
         if (users[u]) {
-            msg.style.color = "red";
-            return msg.textContent = "帳號已存在";
+            msg.style.color = "#a93226";
+            return msg.textContent = "※ 此帳號已存在";
         }
         
         users[u] = { passwordHash: await hashPassword(p) };
         storage.saveUsers(users);
-        msg.style.color = "green";
-        msg.textContent = "註冊成功！請點擊登入";
+        msg.style.color = "#2c3e50";
+        msg.textContent = "登記成功，請進行登入。";
       };
   }
 
@@ -67,14 +67,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const users = storage.getUsers();
         
         if (!users[u]) {
-             msg.style.color = "red";
-             return msg.textContent = "帳號不存在";
+             msg.style.color = "#a93226";
+             return msg.textContent = "※ 查無此帳號";
         }
 
         const hash = await hashPassword(p);
         if (hash !== users[u].passwordHash) {
-          msg.style.color = "red";
-          return msg.textContent = "密碼錯誤";
+          msg.style.color = "#a93226";
+          return msg.textContent = "※ 密碼不正確";
         }
         
         localStorage.setItem("currentUser", u);
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const user = storage.getCurrentUser();
           if(!user) return;
           
-          const confirmDelete = confirm(`🍊 確定要註銷「${user}」的帳號嗎？\n\n注意：所有的習慣與行程資料都將永久刪除！`);
+          const confirmDelete = confirm(`🏮 【慎重】確定要註銷「${user}」的帳號嗎？\n\n所有的習慣與行程資料都將永久焚毀，無法復原。`);
           
           if(confirmDelete) {
               const users = storage.getUsers();
@@ -123,7 +123,7 @@ function showApp(user) {
   if(appPage) appPage.classList.remove("hidden");
   
   const userDisplay = document.getElementById("user-display");
-  if(userDisplay) userDisplay.textContent = `👤 ${user}`;
+  if(userDisplay) userDisplay.textContent = `${user} 樣`;
   
   const welcomeUser = document.getElementById("welcome-user");
   if(welcomeUser) welcomeUser.textContent = user;
@@ -156,8 +156,7 @@ function showSection(id) {
 }
 
 function addEnterListener(inputId, buttonId) {
-    const input = document.getElementById("inputId");
-    // 防呆：如果找不到該 ID 的輸入框，就不綁定事件，避免報錯
+    const input = document.getElementById(inputId);
     if(!input) return; 
 
     input.addEventListener("keypress", (event) => {
@@ -195,10 +194,10 @@ function initHabits(user) {
       if (isDone) li.className = "completed";
       
       li.innerHTML = `
-        <span>${h}</span>
+        <span style="font-weight: bold;">${h}</span>
         <div class="action-buttons">
             <button class="check-btn" ${isDone ? 'disabled' : ''}>
-              ${isDone ? '已完成' : '打卡'}
+              ${isDone ? '本日已畢' : '打卡'}
             </button>
             <button class="delete-btn">刪除</button>
         </div>
@@ -211,7 +210,7 @@ function initHabits(user) {
       };
 
       li.querySelector(".delete-btn").onclick = () => {
-          if(confirm(`確定不再追蹤「${h}」這個習慣嗎？`)) {
+          if(confirm(`確定不再追蹤「${h}」嗎？`)) {
               habits.splice(index, 1);
               localStorage.setItem(`habits_${user}`, JSON.stringify(habits));
               render();
@@ -235,7 +234,7 @@ function initHabits(user) {
             input.value = "";
             render();
           } else {
-            alert("這個習慣已經存在囉！");
+            alert("此習慣已在修煉名單中。");
           }
         }
       };
@@ -244,15 +243,14 @@ function initHabits(user) {
 }
 
 /*************************
- * 4. 行程排定 (修復版)
+ * 4. 行程排定
  *************************/
 function initSchedules(user) {
   const dateInput = document.getElementById("schedule-date-input");
   const timeInput = document.getElementById("schedule-time-input");
   
-  // 防呆檢查：如果 HTML 沒更新導致找不到時間輸入框，跳出警告
   if(!timeInput) {
-      console.error("錯誤：找不到 id='schedule-time-input'。請確認 index.html 是否已存檔並包含 <input type='time' id='schedule-time-input'>。");
+      console.error("錯誤：找不到時間輸入框");
       return; 
   }
   
@@ -260,7 +258,6 @@ function initSchedules(user) {
       dateInput.value = new Date().toISOString().split('T')[0];
   }
 
-  // 綁定 Enter 鍵 (直接在這裡綁定比較保險)
   const inputCtx = document.getElementById("new-schedule-input");
   if(inputCtx) {
       inputCtx.addEventListener("keypress", (e) => {
@@ -271,7 +268,7 @@ function initSchedules(user) {
   const render = () => {
     const date = dateInput.value;
     const label = document.getElementById("current-view-date-label");
-    if(label) label.textContent = `📅 ${date} 的時間軸`;
+    if(label) label.textContent = `📅 ${date} 行程一覽`;
     
     const list = document.getElementById("schedule-list");
     list.innerHTML = "";
@@ -279,7 +276,6 @@ function initSchedules(user) {
     const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
     const dayData = all[date] || [];
     
-    // 依時間排序
     dayData.sort((a, b) => a.time.localeCompare(b.time));
 
     dayData.forEach((item, index) => {
@@ -289,10 +285,10 @@ function initSchedules(user) {
       li.innerHTML = `
         <div style="display: flex; align-items: center;">
             <span class="time-tag">${item.time}</span>
-            <span>${item.text}</span>
+            <span style="letter-spacing: 1px;">${item.text}</span>
         </div>
         <div class="action-buttons">
-            <button class="check-btn" ${item.done ? 'disabled' : ''}>${item.done ? '✓' : '完成'}</button>
+            <button class="check-btn" ${item.done ? 'disabled' : ''}>${item.done ? '已完成' : '完成'}</button>
             <button class="delete-btn">刪除</button>
         </div>
       `;
@@ -320,13 +316,9 @@ function initSchedules(user) {
   const addSchBtn = document.getElementById("add-schedule-btn");
   if(addSchBtn) {
       addSchBtn.onclick = () => {
-        // 在按鈕按下時才抓取值
         const text = inputCtx.value.trim();
         const time = timeInput.value; 
         const date = dateInput.value;
-
-        // 除錯用：如果您按了按鈕沒反應，可以看 Console
-        console.log(`嘗試新增行程: 日期=${date}, 時間=${time}, 內容=${text}`);
 
         if (text && time) {
           const all = JSON.parse(localStorage.getItem(`schedules_${user}`)) || {};
@@ -338,7 +330,7 @@ function initSchedules(user) {
           inputCtx.value = "";
           render();
         } else {
-            alert("請務必選擇「時間」並輸入「內容」！(若時間選不了，請檢查 HTML)");
+            alert("請務必選擇「時間」並輸入「內容」");
         }
       };
   }
