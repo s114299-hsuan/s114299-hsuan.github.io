@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>生活紀錄 - 專注每一天</title>
-  <link rel="icon" href="myicon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,7 +13,7 @@
     <h1>生活紀錄</h1>
     <p class="subtitle">簡單 · 安靜 · 專注</p>
     <div class="login-inputs">
-      <input id="username" placeholder="帳號">
+      <input id="username" type="text" placeholder="帳號">
       <input id="password" type="password" placeholder="密碼">
     </div>
     <button id="login-btn">登入系統</button>
@@ -24,7 +23,7 @@
 </section>
 
 <section id="app-page" class="hidden">
- <header class="app-header">
+  <header class="app-header">
     <h2>我的生活看板</h2>
     <div class="header-right">
         <span id="user-display"></span>
@@ -58,7 +57,7 @@
         <p>習慣一旦養成，就會成為你的力量（每日限打卡一次）</p>
       </div>
       <div class="input-group">
-        <input type="text" id="new-habit-input" placeholder="想要養成什麼新習慣？">
+        <input type="text" id="new-habit-input" placeholder="想要養成什麼新習慣？(按 Enter 新增)">
         <button id="add-habit-btn">新增習慣</button>
       </div>
       <ul id="habit-list"></ul>
@@ -72,7 +71,7 @@
       <div class="schedule-controls">
         <input type="date" id="schedule-date-input">
         <input type="number" id="schedule-hour-input" min="0" max="23" placeholder="小時(0-23)">
-        <input type="text" id="new-schedule-input" placeholder="行程規劃內容...">
+        <input type="text" id="new-schedule-input" placeholder="行程規劃內容... (按 Enter 新增)">
         <button id="add-schedule-btn">新增行程</button>
       </div>
       <h4 id="current-view-date-label"></h4>
